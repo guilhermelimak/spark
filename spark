@@ -57,7 +57,7 @@ def spark_it():
 
     create_local_repo()
     add_remote(clone_url)
-
+    
     if check_empty() is False:
         first_commit()
 
