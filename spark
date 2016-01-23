@@ -6,8 +6,8 @@ import json
 import sys
 
 dir_name = os.path.split(os.getcwd())[-1]
-username = "guilhermelimak"
-token = "589f32d7849bfc6e59219d704da08012100cbe6b"
+username = "YOUR_GITHUB_USERNAME"
+token = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
 auth = (username, token)
 
 params = {
