@@ -1,0 +1,76 @@
+#!/usr/bin/python
+
+import requests
+import os
+import json
+import sys
+
+dir_name = os.path.split(os.getcwd())[-1]
+username = "guilhermelimak"
+token = "589f32d7849bfc6e59219d704da08012100cbe6b"
+auth = (username, token)
+
+params = {
+    "name":dir_name 
+}
+
+json_params = json.dumps(params)
+
+def help():
+    helpMessage = """Usage: spark it
+       spark it command creates a new repository with working directory as name and add the remote
+"""
+    print helpMessage
+
+def create_github_repo(auth, json_params):
+    request_url = "https://api.github.com/user/repos"
+    r = requests.post(request_url, auth=auth, data=json_params)
+    data = json.loads(r.text)
+    print r.text
+    clone_url = data["clone_url"] 
+
+    return clone_url 
+
+def create_local_repo():
+    os.system("git init")
+
+def add_remote(clone_url):
+    clone_url = clone_url[8:]
+    clone_url = "https://" + username + "@" + clone_url
+    command = "git remote add origin %s" % (clone_url)
+
+    os.system(command)
+
+def first_commit():
+    os.system("git add --all")
+    os.system('git commit -m "Initial commit"')
+    os.system("git push -u origin master")
+
+def check_empty():
+    if os.listdir(os.getcwd()) == ['.git'] or os.listdir(os.getcwd()) == []:
+        return True
+    else:
+        return False
+
+def spark_it():
+    clone_url = create_github_repo(auth, json_params)
+
+    create_local_repo()
+    add_remote(clone_url)
+
+    if check_empty() is False:
+        first_commit()
+
+def main():
+    if len(sys.argv) < 2:
+        help()
+    else:
+        if sys.argv[1] == "it":
+            spark_it()
+        elif sys.argv[1] == "addalias":
+            add_alias()
+        else:
+            help()
+
+if __name__ == '__main__':
+    main()
