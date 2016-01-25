@@ -21,9 +21,12 @@ params = {
 json_params = json.dumps(params)
 
 def help():
-    helpMessage = """Usage: spark (creates a new repository with working directory as name and add the remote.)
-       Use -c to add --all and commit the work you have in the working directory as the initial commit.
-       Use -i to git init the working directory."""
+    helpMessage = """Usage: Spark (creates a new repository with working directory as name and add the remote.)
+       Use -c to add --all, commit and push the work you have in the working directory as the initial commit.
+       Use -i to git init the working directory.
+       Use -ssh to clone the repo using ssh instead of html.
+       Use -n to specify a name to the repo instead of using the folder name
+       Use -h to print this help."""
 
     print helpMessage
 
@@ -71,7 +74,7 @@ def spark_it():
         else:
             print "There's nothing to commit here."
 
-def getArgs():
+def getArgs):
         for i in sys.argv:
             if sys.argv.index(i) == 0:
                 pass
@@ -79,7 +82,7 @@ def getArgs():
                 if i == "-c":
                     global commit_flag
                     commit_flag = True
-                elif i == "-i":
+              elif i == "-i":
                     global init_flag
                     init_flag = True 
                 elif i == "-h":
