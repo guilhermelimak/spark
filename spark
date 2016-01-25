@@ -10,6 +10,10 @@ username = "YOUR_GITHUB_USERNAME"
 token = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
 auth = (username, token)
 
+commit_flag = False
+init_flag = False
+help_flag = False
+
 params = {
     "name":dir_name 
 }
@@ -17,9 +21,10 @@ params = {
 json_params = json.dumps(params)
 
 def help():
-    helpMessage = """Usage: spark it
-       spark it command creates a new repository with working directory as name and add the remote
-"""
+    helpMessage = """Usage: spark (creates a new repository with working directory as name and add the remote.)
+       Use -c to add --all and commit the work you have in the working directory as the initial commit.
+       Use -i to git init the working directory."""
+
     print helpMessage
 
 def create_github_repo(auth, json_params):
@@ -31,7 +36,7 @@ def create_github_repo(auth, json_params):
 
     return clone_url 
 
-def create_local_repo():
+def git_init():
     os.system("git init")
 
 def add_remote(clone_url):
@@ -55,22 +60,39 @@ def check_empty():
 def spark_it():
     clone_url = create_github_repo(auth, json_params)
 
-    create_local_repo()
+    if init_flag == True:
+        git_init()
+
     add_remote(clone_url)
-    
-    if check_empty() is False:
-        first_commit()
+
+    if commit_flag == True:
+        if check_empty() is False:
+            first_commit()
+        else:
+            print "There's nothing to commit here."
+
+def getArgs():
+        for i in sys.argv:
+            if sys.argv.index(i) == 0:
+                pass
+            else:
+                if i == "-c":
+                    global commit_flag
+                    commit_flag = True
+                elif i == "-i":
+                    global init_flag
+                    init_flag = True 
+                elif i == "-h":
+                    global help_flag
+                    help_flag = True
+                    break
 
 def main():
-    if len(sys.argv) < 2:
+    getArgs()
+    if help_flag == True:
         help()
     else:
-        if sys.argv[1] == "it":
-            spark_it()
-        elif sys.argv[1] == "addalias":
-            add_alias()
-        else:
-            help()
-
+        spark_it()
+    
 if __name__ == '__main__':
     main()
